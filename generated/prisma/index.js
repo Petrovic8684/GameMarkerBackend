@@ -169,6 +169,10 @@ const config = {
         "fromEnvVar": null,
         "value": "windows",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -195,8 +199,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  regular\n  admin\n}\n\nmodel User {\n  id        Int        @id @default(autoincrement())\n  email     String     @unique\n  username  String\n  password  String\n  image     String?\n  role      Role       @default(regular)\n  gender    String\n  bio       String?\n  reviews   Review[]\n  isBanned  Boolean    @default(false)\n  followers Follower[] @relation(\"UserFollowers\")\n  following Follower[] @relation(\"UserFollowing\")\n}\n\nmodel Review {\n  id         Int      @id @default(autoincrement())\n  rating     Decimal?\n  comment    String?\n  completed  Boolean?\n  platform   String?\n  difficulty String?\n  gameId     Int\n  createdBy  Int\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  user User @relation(fields: [createdBy], references: [id])\n\n  @@index([createdBy])\n}\n\nmodel Follower {\n  id         Int      @id @default(autoincrement())\n  followerId Int\n  followedId Int\n  dismissed  Boolean  @default(false)\n  createdAt  DateTime @default(now())\n\n  follower User @relation(\"UserFollowing\", fields: [followerId], references: [id])\n  followed User @relation(\"UserFollowers\", fields: [followedId], references: [id])\n\n  @@unique([followerId, followedId])\n}\n",
-  "inlineSchemaHash": "103b617b72d53ff9db86b972d460a6bd18dad49f4577cf40d3bed285f13eee29",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../generated/prisma\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Role {\n  regular\n  admin\n}\n\nmodel User {\n  id        Int        @id @default(autoincrement())\n  email     String     @unique\n  username  String\n  password  String\n  image     String?\n  role      Role       @default(regular)\n  gender    String\n  bio       String?\n  reviews   Review[]\n  isBanned  Boolean    @default(false)\n  followers Follower[] @relation(\"UserFollowers\")\n  following Follower[] @relation(\"UserFollowing\")\n}\n\nmodel Review {\n  id         Int      @id @default(autoincrement())\n  rating     Decimal?\n  comment    String?\n  completed  Boolean?\n  platform   String?\n  difficulty String?\n  gameId     Int\n  createdBy  Int\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  user User @relation(fields: [createdBy], references: [id])\n\n  @@index([createdBy])\n}\n\nmodel Follower {\n  id         Int      @id @default(autoincrement())\n  followerId Int\n  followedId Int\n  dismissed  Boolean  @default(false)\n  createdAt  DateTime @default(now())\n\n  follower User @relation(\"UserFollowing\", fields: [followerId], references: [id])\n  followed User @relation(\"UserFollowers\", fields: [followedId], references: [id])\n\n  @@unique([followerId, followedId])\n}\n",
+  "inlineSchemaHash": "9b11e7e762b9db7383339d90648d12b1a240ebc80e06d8fefe905146052cb78e",
   "copyEngine": true
 }
 
@@ -237,6 +241,10 @@ Object.assign(exports, Prisma)
 // file annotations for bundling tools to include these files
 path.join(__dirname, "query_engine-windows.dll.node");
 path.join(process.cwd(), "generated/prisma/query_engine-windows.dll.node")
+
+// file annotations for bundling tools to include these files
+path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node");
+path.join(process.cwd(), "generated/prisma/libquery_engine-rhel-openssl-3.0.x.so.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "generated/prisma/schema.prisma")
